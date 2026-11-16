@@ -22,15 +22,23 @@ On Linux or macOS (with a single-configuration generator):
 ./build/Lab5
 
 Project structure
-.
+
 ├── BST.h            # BST class declaration
+
 ├── BST.cpp          # Insertion, traversal, and cleanup logic
+
 ├── node.h           # Node definition
+
 ├── node.cpp         # Node constructor
+
 ├── main.cpp         # Console input and program entry point
+
 ├── CMakeLists.txt    # C++20 build configuration
+
 ├── .gitignore        # Ignores binaries and generated build files
+
 └── README.md
+
 Security and quality
 This repository is being prepared for an OpenSSF Scorecard assessment and the OpenSSF Best Practices badge. The CMake configuration enables compiler warnings and treats warnings as errors. The application also includes basic integer-input validation and tree cleanup.
 
