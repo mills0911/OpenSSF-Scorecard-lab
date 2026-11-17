@@ -1,5 +1,35 @@
 #include "BST.h"
 #include <iostream>
+#include <cassert>
+
+#ifndef NDEBUG
+// Check BST ordering, duplicate frequencies, and the recorded node count.
+// The bounds use node values, so INT_MIN and INT_MAX are handled correctly.
+bool BST::validateSubtree(const Node* current, const Node* lower,
+                          const Node* upper, int& visited) const {
+    if (current == nullptr) {
+        return true;
+    }
+    if (current->frequency < 1 ||
+        (lower != nullptr && current->data <= lower->data) ||
+        (upper != nullptr && current->data >= upper->data)) {
+        return false;
+    }
+    if (++visited > size) {
+        return false;
+    }
+    return validateSubtree(current->left, lower, current, visited) &&
+           validateSubtree(current->right, current, upper, visited);
+}
+
+void BST::assertInvariants() const {
+    assert(size >= 0);
+    assert((root != nullptr) == (size > 0));
+    int visited = 0;
+    assert(validateSubtree(root, nullptr, nullptr, visited));
+    assert(visited == size);
+}
+#endif
 
 // Creation
 BST::BST(){
@@ -89,21 +119,33 @@ void BST::add(int numToAdd){
     if (root == nullptr){
         root = new Node(numToAdd);
         size++;
+#ifndef NDEBUG
+        assertInvariants();
+#endif
         return;
     }
     // if it is not root then find where to add and add
     Node* parent = findParentForInsert(numToAdd);
+    assert(parent != nullptr); // Nonempty tree always has an insertion parent.
     if (parent->data == numToAdd) { // check if parent is duplicate
         std::cout<<"Duplicate Detected"<<std::endl;
         parent->frequency++;
+#ifndef NDEBUG
+        assertInvariants();
+#endif
         return;
     } 
     else if (parent->data > numToAdd){ // check if add node to left
+        assert(parent->left == nullptr);
         parent->left = new Node(numToAdd);
     }
     else{ // add node to right
+        assert(parent->right == nullptr);
         parent->right = new Node(numToAdd);
     }
-    
+
     size++;
+#ifndef NDEBUG
+    assertInvariants();
+#endif
 }

@@ -9,6 +9,13 @@ private:
     int size;
     void deleteTree(Node* root);
 
+#ifndef NDEBUG
+    // Debug-only structural checks; excluded from optimized release builds.
+    bool validateSubtree(const Node* current, const Node* lower,
+                         const Node* upper, int& visited) const;
+    void assertInvariants() const;
+#endif
+
     //Helper Functions
     void printInOrder(Node* root);
     void printPreOrder(Node* root);

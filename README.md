@@ -51,6 +51,35 @@ On Linux or macOS with a single-configuration generator, run:
 
 The executable path may differ on Windows or when using a multi-configuration generator (for example, the executable may be placed in a `Debug` or `Release` subdirectory).
 
+## Static and Dynamic Security Analysis
+
+GitHub Actions runs Clang static analysis and sanitizer-enabled tests on pushes
+and pull requests. These checks complement compiler warnings and automated tests.
+
+**Static analysis:** With Clang and Python 3 installed, run:
+
+```sh
+python3 scripts/run_static_analysis.py
+```
+
+**Dynamic analysis:** With Clang and CMake installed, run:
+
+```sh
+cmake -S . -B build-sanitized -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DENABLE_SANITIZERS=ON
+cmake --build build-sanitized --parallel 2
+ctest --test-dir build-sanitized --output-on-failure
+```
+
+Sanitizers include AddressSanitizer and UndefinedBehaviorSanitizer. Debug builds
+also enable internal BST assertions for ordering, node counts, and duplicate
+frequencies. The sanitizer option is OFF by default; assertions are disabled
+when `NDEBUG` is defined.
+
+**Pre-release policy:** Run Clang static analysis and the sanitizer-enabled
+CTest suite before major production releases. Review findings, promptly fix
+confirmed exploitable medium-or-higher-severity issues, and add regression
+tests when appropriate. Passing checks do not guarantee the absence of bugs.
+
 ## Input and Output Interface
 
 This is a **console program**. It accepts values from standard input and prints results to standard output; it does not expose a web API or graphical interface.
