@@ -1,0 +1,4 @@
+main.cpp: 0 analyzer finding(s)
+BST.cpp: 0 analyzer finding(s)
+node.cpp: 0 analyzer finding(s)
+PASS: Clang Static Analyzer reported no findings.
